@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#0A0B0D">
+<meta name="description" content="Gold Compass — terminal institutionnel XAUUSD : biais, conviction, news gradées, risque géopolitique, scénarios.">
+<title>GOLD COMPASS · XAUUSD</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="app-loading">CHARGEMENT DU TERMINAL…</div>
+
+<div class="app-shell" id="app">
+
+  <!-- ============ 1. HEADER FIXE ============ -->
+  <header class="header-fixed">
+    <div class="hdr-row hdr-row-main">
+      <div class="hdr-left">
+        <span class="hdr-symbol">XAUUSD</span>
+        <span id="hdr-price">—</span>
+        <span id="hdr-change" class="hdr-change flat">—</span>
+      </div>
+      <div class="hdr-right">
+        <span id="hdr-status-block" role="button" tabindex="0" title="Toucher pour rafraîchir">
+          <span class="k"><span id="live-dot" class="live-dot"></span>STATUT</span>
+          <span id="hdr-status" class="hdr-status">—</span>
+        </span>
+        <span><span class="k">RÉGIME</span><span id="hdr-regime" class="hdr-regime">—</span></span>
+      </div>
+    </div>
+    <div class="hdr-row hdr-row-sub">
+      <span><span class="k">ÂGE</span><span id="hdr-age" class="hdr-age">—</span></span>
+      <span><span class="k">SRC</span><span id="hdr-src" class="hdr-src">—</span></span>
+      <span><span class="k">SPRD</span><span id="hdr-spread">—</span></span>
+      <span><span class="k">LAT.</span><span id="hdr-latency">—</span></span>
+      <span><span class="k">UTC</span><span id="hdr-utc">—</span></span>
+      <span><span class="k">LOC</span><span id="hdr-local">—</span></span>
+    </div>
+    <div id="bias-change-flash" class="bias-change-flash" role="status" aria-live="polite"></div>
+  </header>
+
+  <!-- ============ CONTENU ============ -->
+  <main class="content">
+
+    <!-- ============ TAB : SNAPSHOT ============ -->
+    <section class="tab-panel active" data-tab="snapshot">
+
+      <!-- 2. BANDEAU INSTITUTIONAL BIAS -->
+      <div class="bias-banner">
+        <div class="bias-head">
+          <span class="bias-eyebrow">Institutional Bias · Or</span>
+          <span class="bias-updated-wrap">MAJ <span id="bias-updated">—</span></span>
+        </div>
+        <div id="bias-label" class="bias-label">—</div>
+        <div class="bias-row2">
+          <span class="bias-conviction"><span class="bias-conviction-k">CONVICTION</span><span id="bias-conviction-value">—</span></span>
+          <span class="bias-direction-wrap">Sens probable : <span id="bias-direction">—</span></span>
+        </div>
+
+        <div class="prob-bar" id="prob-bar"></div>
+        <div class="prob-labels" id="prob-labels"></div>
+
+        <div class="bias-detail-grid">
+          <div class="bias-detail-item">
+            <div class="k">Niveau d'invalidation</div>
+            <div class="v"><span id="bias-invalidation">—</span> <span id="bias-invalidation-pct" class="v-sub"></span></div>
+          </div>
+          <div class="bias-detail-item">
+            <div class="k">Horizon principal</div>
+            <div class="v">Intraday → multi-session</div>
+          </div>
+        </div>
+
+        <p class="bias-alt" id="bias-alt">—</p>
+        <div class="bias-agreement" id="bias-agreement">—</div>
+      </div>
+
+      <!-- 3. MATRICE DES CATALYSEURS -->
+      <div class="section-title">Matrice des catalyseurs <span class="section-sub">direction · intensité</span></div>
+      <div class="catalyst-grid" id="catalyst-grid"></div>
+
+      <!-- 4. FIL D'ALERTES PRIORISÉ -->
+      <div class="section-title">Alertes prioritaires <span class="section-sub">triées par impact réel</span></div>
+      <div id="news-feed-snapshot"></div>
+      <details class="accordion">
+        <summary>Toutes les alertes</summary>
+        <div id="news-feed-full" style="margin-top:var(--gap-s);"></div>
+      </details>
+
+      <!-- 5. SCÉNARIOS (aperçu) -->
+      <div class="section-title">Scénarios clés <span class="section-sub">session · 24h</span></div>
+      <div id="scenario-cards-snapshot"></div>
+
+      <!-- JOURNAL D'AUDIT DES BIAIS -->
+      <details class="accordion">
+        <summary>Journal des changements de biais</summary>
+        <div id="bias-history" class="bias-history"></div>
+      </details>
+
+      <p class="disclaimer">Outil d'aide à la décision à usage personnel. Probabilités et scores issus d'un moteur heuristique, pas d'une garantie de résultat. Ne constitue pas un conseil en investissement.</p>
+    </section>
+
+    <!-- ============ TAB : MACRO ============ -->
+    <section class="tab-panel" data-tab="macro">
+      <div class="section-title">Macro & marchés <span class="section-sub" id="macro-live-count">—</span></div>
+      <div id="macro-list"></div>
+      <p class="macro-legend">
+        <i class="macro-live-dot"></i> flux live (Yahoo, ~45s) &nbsp;·&nbsp;
+        <i class="macro-static-dot"></i> série statique issue de data.json
+      </p>
+    </section>
+
+    <!-- ============ TAB : GUERRE ============ -->
+    <section class="tab-panel" data-tab="guerre">
+      <div class="section-title">Global Risk Score</div>
+      <div class="risk-summary">
+        <div class="risk-score-block">
+          <div><span id="risk-score-value">—</span><span class="risk-score-max">/100</span></div>
+          <div id="risk-score-level" class="risk-level">—</div>
+        </div>
+        <div class="risk-trend-list">
+          <div class="risk-trend-row"><span class="k">Zones en escalade</span><span id="risk-escalating">—</span></div>
+          <div class="risk-trend-row"><span class="k">Zones stables</span><span id="risk-stable">—</span></div>
+          <div class="risk-trend-row"><span class="k">Zones en désescalade</span><span id="risk-deescalating">—</span></div>
+        </div>
+      </div>
+
+      <div class="section-title">Safe Haven Engine <span class="section-sub">demande refuge / risk-off</span></div>
+      <div class="haven-grid" id="haven-grid"></div>
+
+      <div class="section-title">Zones de tension</div>
+      <div id="geo-zones"></div>
+    </section>
+
+    <!-- ============ TAB : CALENDRIER ============ -->
+    <section class="tab-panel" data-tab="calendrier">
+      <div class="section-title">Calendrier macro <span class="section-sub">événements à venir</span></div>
+      <div id="calendar-list"></div>
+    </section>
+
+    <!-- ============ TAB : SCÉNARIOS ============ -->
+    <section class="tab-panel" data-tab="scenarios">
+      <div class="section-title">Scénarios par horizon <span class="section-sub">1h · session · 24h · 48h · semaine</span></div>
+      <div id="scenario-cards-full"></div>
+    </section>
+
+  </main>
+
+  <!-- ============ 6. FOOTER FIXE — NAVIGATION ============ -->
+  <nav class="footer-nav">
+    <button class="nav-btn active" data-tab="snapshot"><span class="nav-dot"></span>Snapshot</button>
+    <button class="nav-btn" data-tab="macro"><span class="nav-dot"></span>Macro</button>
+    <button class="nav-btn" data-tab="guerre"><span class="nav-dot"></span>Guerre</button>
+    <button class="nav-btn" data-tab="calendrier"><span class="nav-dot"></span>Calendrier</button>
+    <button class="nav-btn" data-tab="scenarios"><span class="nav-dot"></span>Scénarios</button>
+  </nav>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
